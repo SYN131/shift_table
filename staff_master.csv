@@ -1,0 +1,15 @@
+﻿id,name,can_kitchen,rank,詳細
+1,伊藤,1,normal,can_kitchen：キッチンができるなら1、ホールなら0
+2,佐々木,1,normal,rank：新人はbegi、それ以外はnormal
+3,坂根,1,normal,
+4,富江,1,normal,
+5,吉田,1,normal,
+6,高岡,1,normal,
+7,松本,1,normal,
+8,三上,1,normal,
+9,牧浦,0,normal,
+10,山根,0,normal,
+11,槇尾,0,normal,
+12,天井,0,normal,
+13,網城,0,normal,
+14,鎌田,0,begi,
