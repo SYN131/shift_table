@@ -1,0 +1,39 @@
+name: Daily Auto Update Shift
+
+on:
+  schedule:
+    # 毎日日本時間の深夜0時（UTC 15:00）に実行
+    - cron: '0 15 * * *'
+  workflow_dispatch: # ボタンを押して手動で即時更新もできるようにしておく
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install google-auth google-api-python-client pandas openpyxl jpholiday
+
+      - name: Run script
+        env:
+          GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+        run: |
+          # 秘密の鍵(Secrets)からcredentials.jsonを復元
+          echo "$GCP_CREDENTIALS" > credentials.json
+          python shift.py
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "毎日定期更新: $(date +'%Y-%m-%d %H:%M')" || exit 0
+          git push
