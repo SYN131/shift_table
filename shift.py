@@ -157,10 +157,19 @@ if __name__ == "__main__":
     sid = os.environ.get("SPREADSHEET_ID", "13xykI-3nJH91uWUbdvP-xDMGi2zjizKcJZEbDJoPAA4")
     staff = load_staff_master('staff_master.csv')
     y, m, days = generate_calendar()
-    # 実行前に古いファイルを削除
-    if os.path.exists(f"shift_{y}_{m}.html"): os.remove(f"shift_{y}_{m}.html")
+    
+    # ターゲットとなるファイル名
+    target_html = f"shift_{y}_{m}.html"
+    
+    # 【重要】実行前に、リポジトリ内の古いHTMLをOSレベルで削除する
+    if os.path.exists(target_html):
+        os.remove(target_html)
+        print(f"🗑️ 古いファイル {target_html} をリセットしました。")
+
     hope = load_hope_data_from_sheets(sid, y)
+    
     if staff:
         assigned = assign_shift(days, staff, hope)
+        # ここで新しいHTMLが「ゼロから」作られます
         export_to_html(assigned, days, y, m, staff, hope)
-        print("✅ アクセント付きシンプル版で更新完了")
+        print("✅ 現在のスプレッドシートの内容のみで再作成しました。")
