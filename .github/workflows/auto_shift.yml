@@ -40,10 +40,9 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 変更（新しいExcelやHTML）をステージに追加
-          git add .
+          # git add . ではなく -A を使うことで「ファイルの削除」もGitHubに伝えます
+          git add -A
           
-          # 変更がある場合のみ保存、なければスキップ
-          git commit -m "毎日定期更新: $(date +'%Y-%m-%d %H:%M')" || exit 0
-          
+          # 変更（削除や更新）があれば保存
+          git commit -m "最新の回答のみに同期: $(date +'%Y-%m-%d %H:%M')" || exit 0
           git push
