@@ -222,8 +222,17 @@ if __name__ == "__main__":
     sid = os.environ.get("SPREADSHEET_ID", "13xykI-3nJH91uWUbdvP-xDMGi2zjizKcJZEbDJoPAA4")
     staff = load_staff_master('staff_master.csv')
     y, m, days = generate_calendar()
+    
+    # --- ここから修正：古いHTMLファイルを一度完全に削除する ---
+    old_html = f"shift_{y}_{m}.html"
+    if os.path.exists(old_html):
+        os.remove(old_html)
+        print(f"🗑️ 古いファイル {old_html} を削除しました")
+    # --- ここまで ---
+
     hope = load_hope_data_from_sheets(sid, y)
+    
     if staff:
         assigned = assign_shift(days, staff, hope)
         export_to_html(assigned, days, y, m, staff, hope)
-        print("✅ 更新完了（最新回答のみ反映）")
+        print("✅ 最新の回答のみでシフト表を再作成しました")
